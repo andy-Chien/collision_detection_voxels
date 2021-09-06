@@ -56,16 +56,16 @@ public:
     return CollisionDetectorAllocatorVoxel::NAME;
   }
 
-  CollisionWorldPtr allocateWorld(const WorldPtr& world) const override
-  {
-    return CollisionWorldPtr(CollisionDetectorAllocatorVoxel::collision_world->initCollisionWorld(world));
-  }
+  // CollisionWorldPtr allocateWorld(const WorldPtr& world) const override
+  // {
+  //   return CollisionWorldPtr(CollisionDetectorAllocatorVoxel::collision_world->initCollisionWorld(world));
+  // }
 
-  CollisionWorldPtr allocateWorld(const CollisionWorldConstPtr& orig, const WorldPtr& world) const override
-  {
-    // return CollisionWorldPtr(new CollisionWorldVoxel(dynamic_cast<const CollisionWorldVoxel&>(*orig), world));
-    return CollisionWorldPtr(CollisionDetectorAllocatorVoxel::collision_world->initCollisionWorld(dynamic_cast<const CollisionWorldVoxel&>(*orig), world));
-  }
+  // CollisionWorldPtr allocateWorld(const CollisionWorldConstPtr& orig, const WorldPtr& world) const override
+  // {
+  //   // return CollisionWorldPtr(new CollisionWorldVoxel(dynamic_cast<const CollisionWorldVoxel&>(*orig), world));
+  //   return CollisionWorldPtr(CollisionDetectorAllocatorVoxel::collision_world->initCollisionWorld(dynamic_cast<const CollisionWorldVoxel&>(*orig), world));
+  // }
 
   CollisionRobotPtr allocateRobot(const robot_model::RobotModelConstPtr& robot_model) const override
   {
