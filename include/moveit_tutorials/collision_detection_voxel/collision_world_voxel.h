@@ -79,7 +79,7 @@ class GvlManager
 public:
   GvlManager();
   ~GvlManager();
-  void jointStateCallback(const sensor_msgs::JointState::ConstPtr& msg);
+  void jointStateCallback(const robot_state::RobotState& state);
   void pointCloudCallback(const pcl::PointCloud<pcl::PointXYZ>::ConstPtr& msg);
   void voxelInit();
 // private:
@@ -149,23 +149,6 @@ protected:
 
 private:
   static std::unique_ptr<GvlManager> gvl_manager_;
-  ros::NodeHandle ros_hn;
-  ros::Subscriber point_sub;
-  ros::Subscriber robot_sub;
-  std::string urdf_path;
-  shared_ptr<GpuVoxels> gvl;
-
-  Vector3ui map_dimensions;
-  float voxel_side_length; // 1 cm voxel size
-
-  bool new_data_received;
-  PointCloud my_point_cloud;
-  Matrix4f tf;
-  BitVectorVoxel bits_in_collision;
-
-  size_t iteration;
-
-  robot::JointValueMap myRobotJointValues;
 
   void initialize();
   void notifyObjectChange(const ObjectConstPtr& obj, World::Action action);
