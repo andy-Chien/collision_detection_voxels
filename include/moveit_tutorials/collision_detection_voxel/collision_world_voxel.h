@@ -87,6 +87,7 @@ public:
   ros::Subscriber point_sub;
   ros::Subscriber robot_sub;
   std::string urdf_path;
+  std::string urdf_path_1;
   shared_ptr<GpuVoxels> gvl;
 
   Vector3ui map_dimensions;
@@ -98,7 +99,6 @@ public:
   BitVectorVoxel bits_in_collision;
 
   size_t iteration;
-
   robot::JointValueMap myRobotJointValues;
 };
 class CollisionWorldVoxel : public CollisionWorld
@@ -149,6 +149,7 @@ protected:
 
 private:
   static std::unique_ptr<GvlManager> gvl_manager_;
+  static int check_times;
 
   void initialize();
   void notifyObjectChange(const ObjectConstPtr& obj, World::Action action);
