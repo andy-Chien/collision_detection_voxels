@@ -37,8 +37,8 @@
 #ifndef MOVEIT_COLLISION_DETECTION_VOXEL_COLLISION_ROBOT_
 #define MOVEIT_COLLISION_DETECTION_VOXEL_COLLISION_ROBOT_
 
-#include <moveit_tutorials/collision_detection_voxel/collision_common.h>
-#include <moveit_tutorials/collision_detection_voxel/voxel_compat.h>
+#include <collision_detection_voxel/collision_common.h>
+#include <collision_detection_voxel/voxel_compat.h>
 
 namespace collision_detection
 {

@@ -6,7 +6,7 @@
 #define MOVEIT_COLLISION_DETECTION_VOXEL_COLLISION_DETECTOR_VOXEL_PLUGIN_LOADER_H_
 
 #include <moveit/collision_detection/collision_plugin.h>
-#include <moveit_tutorials/collision_detection_voxel/collision_detector_allocator_voxel.h>
+#include <collision_detection_voxel/collision_detector_allocator_voxel.h>
 
 namespace collision_detection
 {

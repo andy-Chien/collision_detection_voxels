@@ -34,9 +34,9 @@
 
 /* Author: Ioan Sucan */
 
-#include <moveit_tutorials/collision_detection_voxel/collision_world_voxel.h>
-#include <moveit_tutorials/collision_detection_voxel/collision_detector_allocator_voxel.h>
-#include <moveit_tutorials/collision_detection_voxel/voxel_compat.h>
+#include <collision_detection_voxel/collision_world_voxel.h>
+#include <collision_detection_voxel/collision_detector_allocator_voxel.h>
+#include <collision_detection_voxel/voxel_compat.h>
 
 #if (MOVEIT_FCL_VERSION >= FCL_VERSION_CHECK(0, 6, 0))
 #include <fcl/geometry/geometric_shape_to_BVH_model.h>

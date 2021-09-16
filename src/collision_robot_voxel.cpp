@@ -34,8 +34,8 @@
 
 /* Author: Ioan Sucan */
 
-#include <moveit_tutorials/collision_detection_voxel/collision_robot_voxel.h>
-#include <moveit_tutorials/collision_detection_voxel/voxel_compat.h>
+#include <collision_detection_voxel/collision_robot_voxel.h>
+#include <collision_detection_voxel/voxel_compat.h>
 
 #if (MOVEIT_FCL_VERSION >= FCL_VERSION_CHECK(0, 6, 0))
 #include <fcl/broadphase/broadphase_dynamic_AABB_tree.h>
