@@ -107,7 +107,6 @@ CollisionWorldVoxel::CollisionWorldVoxel(const CollisionWorldVoxel& other, const
 
 CollisionWorldVoxel::~CollisionWorldVoxel()
 {
-  std::cout<<"FFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCCCCKKKKKKKKKKKKKKKKKKK DELETE "<<this<<std::endl;
   getWorld()->removeObserver(observer_handle_);
 }
 
@@ -172,42 +171,10 @@ void CollisionWorldVoxel::checkRobotCollisionHelper(const CollisionRequest& req,
                                                   const CollisionRobot& robot, const robot_state::RobotState& state,
                                                   const AllowedCollisionMatrix* acm) const
 {
-  // std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  " << &gvl_manager_ << std::endl;
-  // const CollisionRobotVoxel& robot_voxel = dynamic_cast<const CollisionRobotVoxel&>(robot);
-  // VoxelObject voxel_obj;
-  // robot_voxel.constructVoxelObject(state, voxel_obj);
-  // ros::Time begin = ros::Time::now();
   gvl_manager_->jointStateCallback(state);
-  // ros::Time update_end = ros::Time::now();
-  
-  // BitVectorVoxel coll_bits = gvl_manager_->bits_in_collision;
-  // coll_bits.bitVector().setBit(63);
   size_t num_colls;
-  // num_colls = gvl_manager_->gvl->getMap("myHandVoxellist")->as<voxelmap::BitVectorVoxelMap>()->collideWithTypes(gvl_manager_->gvl->getMap("myHandVoxellist_2")->as<voxelmap::BitVectorVoxelMap>(), coll_bits);
-  // ros::Time collision_begin = ros::Time::now();
-  // num_colls = gvl_manager_->gvl->getMap("myHandVoxellist")->as<voxelmap::BitVectorVoxelMap>()->collideWithTypes(gvl_manager_->gvl->getMap("countingVoxelList")->as<voxelmap::BitVectorVoxelMap>(), coll_bits);
   num_colls = gvl_manager_->gvl->getMap("myHandVoxellist")->as<voxelmap::ProbVoxelMap>()->collideWith(gvl_manager_->gvl->getMap("myHandVoxellist_1")->as<voxelmap::ProbVoxelMap>(), 0.2);
-  // ros::Time collision_end = ros::Time::now();
-  // num_colls += gvl_manager_->gvl->getMap("myHandVoxellist_2")->as<voxelmap::BitVectorVoxelMap>()->collideWithTypes(gvl_manager_->gvl->getMap("countingVoxelList")->as<voxelmap::BitVectorVoxelMap>(), coll_bits);
-  // std::cout << "Detected " << num_colls << " collisions, update robot spend " << (update_end - begin).toSec() * 1000 << "ms, check collision spend " <<(collision_end - collision_begin).toSec() * 1000 << "ms" << std::endl;
-  // res.clear();
   res.collision = num_colls > 0;
-  // CollisionData cd(&req, &res, acm);
-  // cd.enableGroup(robot.getRobotModel());
-  // for (std::size_t i = 0; !cd.done_ && i < voxel_obj.collision_objects_.size(); ++i)
-  //   manager_->collide(voxel_obj.collision_objects_[i].get(), &cd, &collisionCallback);
-
-  // if (req.distance)
-  // {
-  //   DistanceRequest dreq;
-  //   DistanceResult dres;
-
-  //   dreq.group_name = req.group_name;
-  //   dreq.acm = acm;
-  //   dreq.enableGroup(robot.getRobotModel());
-  //   distanceRobot(dreq, dres, robot, state);
-  //   res.distance = dres.minimum_distance.distance;
-  // }
 }
 
 void CollisionWorldVoxel::checkWorldCollision(const CollisionRequest& req, CollisionResult& res,
@@ -363,7 +330,6 @@ GvlManager::~GvlManager()
 }
 void GvlManager::voxelInit()
 {
-  std::cout<<"yoyoyoyoyoyoyoyoyoyoyoyoyoyoyoyoyoy"<<std::endl;
   Vector3ui map_dim(256, 256, 256);
   map_dimensions =  map_dim;
   voxel_side_length = 0.01f; // 1 cm voxel size
@@ -466,17 +432,8 @@ void GvlManager::voxelInit()
   gvl->addRobot("myUrdfRobot", urdf_path, false);
   gvl->addRobot("myUrdfRobot_2", urdf_path_1, false);
 
-  // ros::Subscriber sub2 = n.subscribe("obstacle_pose", 1, obstaclePoseCallback);
-  // ros::Subscriber sub = n.subscribe<pcl::PointCloud<pcl::PointXYZ> >(point_cloud_topic, 1, &GvlManager::pointCloudCallback, this);
-  std::cout<<"sub  2 gogogogogog"<<std::endl;
   point_sub = ros_hn.subscribe<pcl::PointCloud<pcl::PointXYZ> >("/camera/depth/color/points", 1, &GvlManager::pointCloudCallback, this);
-  std::cout<<" gogogogogog"<<std::endl;
-  // ros::NodeHandle n;&BaseModule::vectorMoveMsgCallback
-  // ros::Subscriber sub1 = n.subscribe("joint_states", 1, jointStateCallback);
-  // ros::Subscriber sub2 = n.subscribe("obstacle_pose", 1, obstaclePoseCallback);
-  // ros::Subscriber sub = n.subscribe<pcl::Poiicl_coree ROS callback
-  // gvl->insertPointCloudFromFile("myObjectVoxelmap", "hollie/hals_vereinfacht.binvox", true,
-  //                               eBVM_OCCUPIED, false, object_position, 0.3);
+  
   // update the robot joints:
   gvl->setRobotConfiguration("myUrdfRobot", myRobotJointValues);
   // insert the robot into the map:
@@ -485,14 +442,6 @@ void GvlManager::voxelInit()
   gvl->setRobotConfiguration("myUrdfRobot_2", myRobotJointValues);
   // insert the robot into the map:
   gvl->insertRobotIntoMap("myUrdfRobot_2", "myHandVoxellist_1", eBVM_OCCUPIED);
-  /*
-   * Now we start the main loop, that will read ROS messages and update the Robot.
-   */
-  // Define two measurement points:
-  // std::vector<Vector3i> measurement_points;
-  // measurement_points.push_back(Vector3i(40, 100, 50));
-  // measurement_points.push_back(Vector3i(160, 100, 50));
-  // gvl->modifyPrimitives("measurementPoints", measurement_points, 5);
 
   int filter_threshold = icl_core::config::paramOptDefault<int>("filter_threshold", 0);
   std::cout << "Remove voxels containing less points than: " << filter_threshold << std::endl;
@@ -529,22 +478,15 @@ void GvlManager::pointCloudCallback(const pcl::PointCloud<pcl::PointXYZ>::ConstP
 
 void GvlManager::jointStateCallback(const robot_state::RobotState& state)
 {
-  // ros::Time begin = ros::Time::now();
   // 0.09 ~ 1.2 ms  avg 0.1 ms
-  // std::cout << "Got JointStateMessage" << std::endl;
   gvl->clearMap("myHandVoxellist");
   for (int i=0; i<state.getVariableCount(); i++)
   {
     myRobotJointValues[state.getVariableNames()[i]] = state.getVariablePositions()[i];
   }
-  // ros::Time begin1 = ros::Time::now();
   // update the robot joints:  spend 0.15 ~ 2 ms avg 0.16 ms
   gvl->setRobotConfiguration("myUrdfRobot", myRobotJointValues);
-  // ros::Time begin2 = ros::Time::now();
   // insert the robot into the map: spend 0.02 ~ 0.04 ms
   gvl->insertRobotIntoMap("myUrdfRobot", "myHandVoxellist", eBVM_OCCUPIED);
-  // ros::Time begin3 = ros::Time::now();
-  // std::cout << "JointValues spend " << (begin1 - begin).toSec() * 1000 << "ms, setRobotConfig spend " << (begin2 - begin1).toSec() * 1000 
-    // << "ms, insertRobot spend " <<(begin3 - begin2).toSec() * 1000 << "ms" << std::endl;
 }
 };
