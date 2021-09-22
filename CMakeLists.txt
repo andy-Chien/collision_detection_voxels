@@ -129,7 +129,7 @@ install(TARGETS ${MOVEIT_LIB_NAME} collision_detector_voxel_plugin
 
 install(DIRECTORY include/ DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION})
 
-install(FILES ./collision_detector_voxel_description_test.xml DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+install(FILES ./collision_detector_voxel_description.xml DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
 if(CATKIN_ENABLE_TESTING)
   catkin_add_gtest(test_voxel_collision_detection test/test_voxel_collision_detection.cpp)
