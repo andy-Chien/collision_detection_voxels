@@ -173,8 +173,9 @@ void CollisionWorldVoxel::checkRobotCollisionHelper(const CollisionRequest& req,
 {
   gvl_manager_->jointStateCallback(state);
   size_t num_colls;
-  num_colls = gvl_manager_->gvl->getMap("myHandVoxellist")->as<voxelmap::ProbVoxelMap>()->collideWith(gvl_manager_->gvl->getMap("myHandVoxellist_1")->as<voxelmap::ProbVoxelMap>(), 0.2);
+  num_colls = gvl_manager_->gvl->getMap("myHandVoxellist")->as<voxellist::BitVectorVoxelList>()->collideWith(gvl_manager_->gvl->getMap("countingVoxelList")->as<voxellist::BitVectorVoxelList>(), 0.2);
   res.collision = num_colls > 0;
+  std::cout<<"num_colls = "<<num_colls<<std::endl;
 }
 
 void CollisionWorldVoxel::checkWorldCollision(const CollisionRequest& req, CollisionResult& res,
@@ -372,9 +373,9 @@ void GvlManager::voxelInit()
 
   //const Vector3f camera_offsets(2, 0, 1); // camera located at y=0, x_max/2, z_max/2
   // const Vector3f camera_offsets(map_dimensions.x * voxel_side_length * 0.5f, -0.2f, map_dimensions.z * voxel_side_length * 0.5f); // camera located at y=-0.2m, x_max/2, z_max/2
-  const Vector3f camera_offsets(-0.3, 0.7, 0.5);
+  const Vector3f camera_offsets(1.2, 0.7, -2.7);
   float roll = icl_core::config::paramOptDefault<float>("roll", 0.0f) * 3.141592f / 180.0f;
-  float pitch = icl_core::config::paramOptDefault<float>("pitch", 90.0f) * 3.141592f / 180.0f;
+  float pitch = icl_core::config::paramOptDefault<float>("pitch", 0.0f) * 3.141592f / 180.0f;
   float yaw = icl_core::config::paramOptDefault<float>("yaw", 0.0f) * 3.141592f / 180.0f;
   tf = Matrix4f::createFromRotationAndTranslation(Matrix3f::createFromRPY(roll, pitch, yaw), camera_offsets);
 
@@ -389,7 +390,7 @@ void GvlManager::voxelInit()
 
   // Add a map:
   gvl->addMap(MT_PROBAB_VOXELMAP, "myObjectVoxelmap");
-  gvl->addMap(MT_PROBAB_VOXELMAP, "myHandVoxellist");
+  gvl->addMap(MT_BITVECTOR_VOXELLIST, "myHandVoxellist");
   gvl->addMap(MT_PROBAB_VOXELMAP, "myHandVoxellist_1");
 
   
@@ -470,7 +471,22 @@ void GvlManager::pointCloudCallback(const pcl::PointCloud<pcl::PointXYZ>::ConstP
 
   // transform new pointcloud to world coordinates
   my_point_cloud.transformSelf(&tf);
-  
+
+  gvl->clearMap("countingVoxelList");
+
+  gvl->getMap("countingVoxelList")->insertPointCloud(my_point_cloud, eBVM_OCCUPIED);
+
+  std::cout<<"====================== CountingVoxelList Point Clouds Size is "<<gvl->getMap("countingVoxelList")->as<voxellist::CountingVoxelList>()->m_dev_coord_list.size()<<std::endl;
+
+  gvl->getMap("countingVoxelList")->as<voxellist::CountingVoxelList>()->subtractFromCountingVoxelList(
+      gvl->getMap("myHandVoxellist")->as<voxellist::BitVectorVoxelList>(), Vector3f());
+  // gvl->getMap("countingVoxelList")->as<voxellist::BitVectorVoxelList>()->subtract(
+  //     gvl->getMap("myHandVoxellist")->as<voxellist::BitVectorVoxelList>(), Vector3f());
+
+  // Vector3ui* voxel_points = gvl->getMap("countingVoxelList")->as<voxellist::CountingVoxelList>()->voxelList->m_dev_coord_list.size();
+  // for(auto it=voxel_points.begin)
+  std::cout<<"!!!!!!!!!!!!!!!!!!!!!!!!CountingVoxelList Point Clouds Size is "<<gvl->getMap("countingVoxelList")->as<voxellist::CountingVoxelList>()->m_dev_coord_list.size()<<std::endl;
+  gvl->visualizeMap("countingVoxelList");
   new_data_received = true;
 
   LOGGING_INFO(Gpu_voxels, "DistanceROSDemo camera callback. PointCloud size: " << msg->points.size() << endl);
@@ -488,5 +504,6 @@ void GvlManager::jointStateCallback(const robot_state::RobotState& state)
   gvl->setRobotConfiguration("myUrdfRobot", myRobotJointValues);
   // insert the robot into the map: spend 0.02 ~ 0.04 ms
   gvl->insertRobotIntoMap("myUrdfRobot", "myHandVoxellist", eBVM_OCCUPIED);
+  gvl->visualizeMap("myHandVoxellist");
 }
 };
